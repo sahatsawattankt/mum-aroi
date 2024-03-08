@@ -3,7 +3,10 @@
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
+use App\Http\Controllers\MenuController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AdminProfileController;
 
 /*
@@ -45,18 +48,30 @@ require __DIR__.'/auth.php';
 |--------------------------------------------------------------------------
 */
 
-Route::get('/admin/dashboard', function () {
-    return Inertia::render('Admin/Dashboard');
-})->middleware(['auth:admin', 'verified'])->name('admin.dashboard');
+Route::middleware(['adminauth:admin', 'verified'])->prefix('admin')->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
 
-Route::get('/admin/menu', function () {
-    return Inertia::render('Admin/Menu');
-})->middleware(['auth:admin', 'verified'])->name('admin.menu');
+    /*
+    |--------------------------------------------------------------------------
+    | Menu Routes
+    |--------------------------------------------------------------------------
+    */
 
-Route::middleware('auth:admin')->group(function () {
-    Route::get('/admin/profile', [AdminProfileController::class, 'edit'])->name('admin.profile.edit');
-    Route::patch('/admin/profile', [AdminProfileController::class, 'update'])->name('admin.profile.update');
-    Route::delete('/admin/profile', [AdminProfileController::class, 'destroy'])->name('admin.profile.destroy');
+    Route::get('/menu', [MenuController::class, 'index'])->name('admin.menu.index');
+    Route::post('/menu/store', [MenuController::class, 'store'])->name('admin.menu.store');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Profile Routes
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/profile', [AdminProfileController::class, 'edit'])->name('admin.profile.edit');
+    Route::patch('/profile', [AdminProfileController::class, 'update'])->name('admin.profile.update');
+    Route::delete('/profile', [AdminProfileController::class, 'destroy'])->name('admin.profile.destroy');
 });
 
 require __DIR__.'/adminauth.php';
+
+
