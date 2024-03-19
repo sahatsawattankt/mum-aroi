@@ -6,15 +6,16 @@ use App\Models\Menu;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Category extends Model
+class MenuImage extends Model
 {
     use HasFactory;
     protected $fillable = [
-        "name",
+        'menu_id',
+        'image',
     ];
 
-    public function menus()
+    function menu()
     {
-        return $this->hasMany(Menu::class);
+        return $this->belongsTo(Menu::class);
     }
 }

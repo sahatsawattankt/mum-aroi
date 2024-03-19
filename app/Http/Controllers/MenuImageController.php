@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class MenuImagesController extends Controller
+class MenuImageController extends Controller
 {
     //
 }
